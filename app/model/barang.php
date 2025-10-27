@@ -1,5 +1,5 @@
 <?php
-class Barang.php {
+class barang.php {
     private $conn;
 
     public function __construct($db) {
