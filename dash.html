@@ -3,195 +3,102 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Management Supplier | Solusi Pengelolaan Terbaik</title>
-  <!-- Bootstrap -->
+  <title>Portal Internal | Management Supplier</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-  <!-- Icons -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
   <style>
     :root {
       --primary-color: #0d6efd;
-      --primary-dark: #0a58ca;
-      --text-dark: #212529;
-      --text-light: #f8f9fa;
+      --primary-dark: #003c8f;
     }
 
     body {
       font-family: 'Poppins', sans-serif;
-      scroll-behavior: smooth;
-    }
-
-    /* Navbar */
-    .navbar {
-      background-color: white;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-    }
-    .navbar-brand {
-      font-weight: 700;
-      color: var(--primary-color) !important;
-    }
-    .nav-link {
-      font-weight: 500;
-      color: #333 !important;
-    }
-    .nav-link:hover {
-      color: var(--primary-dark) !important;
-    }
-
-    /* Hero Section */
-    .hero {
-      background: linear-gradient(120deg, var(--primary-color), var(--primary-dark));
-      color: white;
-      padding: 100px 0;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+      color: #fff;
       text-align: center;
     }
-    .hero h1 {
-      font-size: 3rem;
-      font-weight: 700;
+
+    .portal-box {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(8px);
+      border-radius: 20px;
+      padding: 50px 40px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+      max-width: 500px;
+      width: 90%;
     }
-    .hero p {
-      font-size: 1.1rem;
-      margin-top: 10px;
+
+    .portal-box h1 {
+      font-weight: 700;
+      font-size: 1.9rem;
+      color: #fff;
+    }
+
+    .portal-box p {
       color: #e0e0e0;
+      margin-top: 15px;
+      font-size: 1rem;
     }
-    .btn-hero {
-      background-color: white;
+
+    .btn-login {
+      background-color: #fff;
       color: var(--primary-color);
-      border: none;
       font-weight: 600;
-      padding: 10px 25px;
-      border-radius: 30px;
-      margin-top: 20px;
-      transition: all 0.3s;
-    }
-    .btn-hero:hover {
-      background-color: var(--primary-dark);
-      color: white;
-    }
-
-    /* About */
-    .about {
-      padding: 80px 0;
-    }
-
-    /* Features */
-    .features {
-      background-color: #f8f9fa;
-      padding: 80px 0;
-    }
-    .feature-box {
-      text-align: center;
-      padding: 30px;
-      background-color: white;
-      border-radius: 12px;
+      border: none;
+      border-radius: 50px;
+      padding: 12px 35px;
+      margin-top: 30px;
       transition: 0.3s;
-      box-shadow: 0 3px 10px rgba(0,0,0,0.05);
-    }
-    .feature-box:hover {
-      transform: translateY(-8px);
-      box-shadow: 0 6px 20px rgba(0,0,0,0.1);
-    }
-    .feature-icon {
-      font-size: 40px;
-      color: var(--primary-color);
-      margin-bottom: 20px;
     }
 
-    /* Footer */
-    footer {
+    .btn-login:hover {
       background-color: var(--primary-dark);
-      color: white;
-      padding: 40px 0;
+      color: #fff;
+      transform: scale(1.05);
+    }
+
+    footer {
+      position: absolute;
+      bottom: 20px;
       text-align: center;
+      color: #d0d0d0;
+      font-size: 0.9rem;
+    }
+
+    @media (max-width: 768px) {
+      .portal-box {
+        padding: 40px 25px;
+      }
+      .portal-box h1 {
+        font-size: 1.6rem;
+      }
     }
   </style>
 </head>
 <body>
 
-  <!-- Navbar -->
-  <nav class="navbar navbar-expand-lg fixed-top">
-    <div class="container">
-      <a class="navbar-brand" href="#">ManagementSupplier</a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
-        <ul class="navbar-nav">
-          <li class="nav-item"><a class="nav-link" href="#home">Beranda</a></li>
-          <li class="nav-item"><a class="nav-link" href="#about">Tentang</a></li>
-          <li class="nav-item"><a class="nav-link" href="#features">Fitur</a></li>
-          <li class="nav-item"><a class="nav-link" href="#contact">Kontak</a></li>
-        </ul>
-      </div>
+  <div class="portal-box">
+    <div class="mb-3">
+      <i class="bi bi-box-seam" style="font-size: 3rem; color: #fff;"></i>
     </div>
-  </nav>
+    <h1>Portal Internal Management Supplier</h1>
+    <p>Selamat datang di sistem pengelolaan supplier internal perusahaan.  
+       Silakan masuk untuk mengakses dashboard dan data operasional.</p>
+    <a href="login.html" class="btn btn-login">
+      <i class="bi bi-box-arrow-in-right me-2"></i> Masuk ke Sistem
+    </a>
+  </div>
 
-  <!-- Hero Section -->
-  <section class="hero" id="home">
-    <div class="container">
-      <h1>Solusi Modern untuk Manajemen Supplier Anda</h1>
-      <p>Kelola data, pantau transaksi, dan tingkatkan efisiensi bisnis Anda dengan sistem digital terintegrasi.</p>
-      <a href="#about" class="btn btn-hero">Pelajari Lebih Lanjut</a>
-    </div>
-  </section>
-
-  <!-- About Section -->
-  <section class="about" id="about">
-    <div class="container text-center">
-      <h2 class="fw-bold mb-4 text-primary">Tentang Kami</h2>
-      <p class="lead text-muted mx-auto" style="max-width: 800px;">
-        <b>Management Supplier</b> adalah platform inovatif yang membantu perusahaan mengelola hubungan dengan pemasok secara efisien. Dengan teknologi modern, kami mempermudah proses pengadaan, pelacakan barang, dan laporan keuangan dalam satu sistem yang terintegrasi.
-      </p>
-    </div>
-  </section>
-
-  <!-- Features Section -->
-  <section class="features" id="features">
-    <div class="container">
-      <h2 class="text-center fw-bold text-primary mb-5">Fitur Unggulan</h2>
-      <div class="row g-4">
-        <div class="col-md-4">
-          <div class="feature-box">
-            <div class="feature-icon"><i class="bi bi-speedometer2"></i></div>
-            <h5>Dashboard Interaktif</h5>
-            <p>Pantau data supplier dan transaksi dengan tampilan grafik yang dinamis dan mudah dibaca.</p>
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div class="feature-box">
-            <div class="feature-icon"><i class="bi bi-shield-check"></i></div>
-            <h5>Keamanan Data</h5>
-            <p>Data Anda dilindungi dengan enkripsi tingkat tinggi untuk menjamin kerahasiaan dan integritas.</p>
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div class="feature-box">
-            <div class="feature-icon"><i class="bi bi-graph-up"></i></div>
-            <h5>Laporan Otomatis</h5>
-            <p>Dapatkan laporan real-time mengenai pengadaan, stok, dan kinerja supplier dalam hitungan detik.</p>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Contact Section -->
-  <section id="contact" class="py-5">
-    <div class="container text-center">
-      <h2 class="fw-bold text-primary mb-4">Hubungi Kami</h2>
-      <p class="text-muted mb-4">Punya pertanyaan atau ingin bekerja sama? Kirim pesan kepada kami.</p>
-      <a href="mailto:info@managementsupplier.com" class="btn btn-primary rounded-pill px-4">
-        <i class="bi bi-envelope"></i> Kirim Email
-      </a>
-    </div>
-  </section>
-
-  <!-- Footer -->
   <footer>
-    <p class="mb-0">&copy; 2025 Management Supplier. Semua Hak Dilindungi.</p>
+    &copy; 2025 PT. Management Supplier Indonesia <br> Semua Hak Dilindungi.
   </footer>
 
-  <!-- JS -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
