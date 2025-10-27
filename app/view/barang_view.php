@@ -7,7 +7,7 @@
     <h1>Form Tambah Barang</h1>
 
     <form method="POST" action="landing.php">
-        <input type="int" name="id_barang" planceholder=" id Brang" required><br><br>
+        <input type="int" name="id_barang" planceholder=" id Barang" required><br><br>
         <input type="varchar" name="nama_barang" placeholder="Nama Barang" required><br><br>
         <input type="int" name="stok" placeholder="Stok" required><br><br>
         <input type="decimal" step="0.01" name="harga" placeholder="Harga" required><br><br>
