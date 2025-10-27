@@ -15,7 +15,7 @@ class barang_controller {
 
     public function add($id_barang$nama_barang, $stok, $harga, $kondisi_barang) {
         $this->model->addBarang($id_barang,$nama_barang, $stok, $harga, $kondisi_barang);
-        header("Location: landing.php"); // refresh halaman
+        header("Location: index.php"); // refresh halaman
     }
 }
 ?>
