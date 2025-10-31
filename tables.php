@@ -324,7 +324,7 @@ $dataBarang = mysqli_query($conn, "SELECT * FROM barang");
                             <!-- /.nav-second-level -->
                         </li>
                         <li>
-                            <a href="tables.html"><i class="fa fa-table fa-fw"></i> Tables</a>
+                            <a href="tables.html"><i class="fa fa-table fa-fw"></i> Master Barang</a>
                         </li>
                         <li>
                             <a href="forms.html"><i class="fa fa-edit fa-fw"></i> Forms</a>
@@ -403,7 +403,7 @@ $dataBarang = mysqli_query($conn, "SELECT * FROM barang");
         <div id="page-wrapper">
             <div class="row">
                 <div class="col-lg-12">
-                    <h1 class="page-header">Tables</h1>
+                    <h1 class="page-header">Barang</h1>
                 </div>
                 <!-- /.col-lg-12 -->
             </div>
@@ -801,5 +801,6 @@ $dataBarang = mysqli_query($conn, "SELECT * FROM barang");
 </body>
 
 </html>
+
 
 
