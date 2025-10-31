@@ -1,27 +1,17 @@
 <?php
-require_once __DIR__ . '/../config/koneksi.php';
+class Barang {
+    private $conn;
+    private $table_name = "barang";
 
-class barang {
-    private $koneksi;
-
-    public function __construct() {
-        $this->koneksi = koneksiDatabase();
+    public function __construct($db) {
+        $this->conn = $db;
     }
 
-    public function getAllBarang() {
-        $query = "SELECT * FROM barang";
-        $result = mysqli_query($this->koneksi, $query);
-
-        if (!$result) {
-            die("Query error: " . mysqli_error($this->koneksi));
-        }
-
-        $data = [];
-        while ($row = mysqli_fetch_assoc($result)) {
-            $data[] = $row;
-        }
-
-        return $data;
+    public function readAll() {
+        $query = "SELECT * FROM " . $this->table_name;
+        $stmt = $this->conn->prepare($query);
+        $stmt->execute();
+        return $stmt;
     }
 }
 ?>
