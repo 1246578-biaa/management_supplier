@@ -1,16 +1,16 @@
 <?php
+require_once __DIR__ . '/../config/database.php';
 require_once __DIR__ . '/../models/barang.php';
 
-class barang_controllers {
-    private $model;
+class BarangController {
+    public function index() {
+        $database = new Database();
+        $db = $database->getConnection();
 
-    public function __construct() {
-        $this->model = new barang();
-    }
+        $barang = new Barang($db);
+        $stmt = $barang->readAll();
 
-    public function tampilBarang() {
-        return $this->model->getAllBarang();
+        include __DIR__ . '/../views/barang_views.php';
     }
 }
 ?>
-
