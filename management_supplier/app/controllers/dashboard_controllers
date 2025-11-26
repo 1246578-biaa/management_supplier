@@ -19,14 +19,12 @@ class DashboardController
         $totalReturn    = $this->model->getTotalReturn();
         $pesananTerbaru = $this->model->getPesananTerbaru();
 
-        // Chart data default (per bulan)
         $chartSupplier = $this->model->getChartPesananPerSupplier();
         $chartTime     = $this->model->getChartPesananPerBulan();
 
         require_once __DIR__ . '/../views/dashboard_views.php';
     }
-
-    // Ajax untuk filter waktu chart (minggu, bulan, tahun)
+    
     public function filterChart($periode)
     {
         $data = $this->model->getChartPesananPerTime($periode);
