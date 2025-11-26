@@ -1,46 +1,49 @@
 <?php include __DIR__.'/template/header.php'; ?>
-
-<link rel="stylesheet" href="/management_supplier/admin/css/custom-dashboard.css?v=<?= time(); ?>">
-
 <div class="main-content">
     <h2 class="title">Dashboard</h2>
 
     <!-- Stat cards -->
-    <div class="row">
-        <div class="col-md-2">
-            <div class="total-box">
-                <h4>Total Pesanan</h4>
-                <span><?= htmlspecialchars($totalPesanan) ?></span>
+    <div class="stat-cards">
+        <div class="total-card">
+            <div class="stat-icon-box"><i class="fa fa-box"></i></div>
+            <div class="stat-info">
+                <div class="stat-label">Total Pesanan</div>
+                <div class="stat-value"><?= $totalPesanan ?></div>
             </div>
         </div>
-        <div class="col-md-2">
-            <div class="total-box">
-                <h4>Pesanan Dikirim</h4>
-                <span><?= htmlspecialchars($totalDikirim) ?></span>
+        <div class="total-card">
+            <div class="stat-icon-box" style="background:#10b981;"><i class="fa fa-truck"></i></div>
+            <div class="stat-info">
+                <div class="stat-label">Dikirim</div>
+                <div class="stat-value"><?= $totalDikirim ?></div>
             </div>
         </div>
-        <div class="col-md-2">
-            <div class="total-box">
-                <h4>Pesanan Diambil</h4>
-                <span><?= htmlspecialchars($totalDiambil) ?></span>
+        <div class="total-card">
+            <div class="stat-icon-box" style="background:#f59e0b;"><i class="fa fa-hand-holding"></i></div>
+            <div class="stat-info">
+                <div class="stat-label">Diambil</div>
+                <div class="stat-value"><?= $totalDiambil ?></div>
             </div>
         </div>
-        <div class="col-md-2">
-            <div class="total-box">
-                <h4>Total Barang</h4>
-                <span><?= htmlspecialchars($totalBarang) ?></span>
+        <div class="total-card">
+            <div class="stat-icon-box" style="background:#6366f1;"><i class="fa fa-cubes"></i></div>
+            <div class="stat-info">
+                <div class="stat-label">Total Barang</div>
+                <div class="stat-value"><?= $totalBarang ?></div>
             </div>
         </div>
-        <div class="col-md-2">
-            <div class="total-box">
-                <h4>Total Supplier</h4>
-                <span><?= htmlspecialchars($totalSupplier) ?></span>
+        <div class="total-card">
+            <div class="stat-icon-box" style="background:#ec4899;"><i class="fa fa-users"></i></div>
+            <div class="stat-info">
+                <div class="stat-label">Total Supplier</div>
+                <div class="stat-value"><?= $totalSupplier ?></div>
             </div>
         </div>
-        <div class="col-md-2">
-            <div class="total-box">
-                <h4>Total Return</h4>
-                <span><?= htmlspecialchars($totalReturn) ?></span>
+        <div class="total-card">
+            <div class="stat-icon-box" style="background:#ef4444;"><i class="fa fa-undo"></i></div>
+            <div class="stat-info">
+                <div class="stat-label">Return</div>
+                <div class="stat-value"><?= $totalReturn ?></div>
             </div>
         </div>
     </div>
