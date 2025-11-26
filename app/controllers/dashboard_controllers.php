@@ -26,7 +26,6 @@ class DashboardController
         require_once __DIR__ . '/../views/dashboard_views.php';
     }
 
-    // Ajax untuk filter waktu chart (minggu, bulan, tahun)
     public function filterChart($periode)
     {
         $data = $this->model->getChartPesananPerTime($periode);
