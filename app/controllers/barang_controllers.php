@@ -8,9 +8,6 @@ class BarangController{
         $this->db = $db;
     }
 
-    // ==========================
-    // HALAMAN UTAMA
-    // ==========================
     public function index()
     {
         // Ambil supplier
@@ -36,9 +33,6 @@ class BarangController{
         include __DIR__ . '/../views/barang_views.php';
     }
 
-    // ==========================
-    // TAMBAH BARANG
-    // ==========================
     public function store()
     {
         $id_barang   = $_POST['id_barang'];
@@ -47,7 +41,6 @@ class BarangController{
         $stok        = $_POST['stok'];
         $harga       = $_POST['harga'];
 
-        // upload gambar
         $gambar = "";
         if (!empty($_FILES['gambar']['name'])) {
             $gambar = time() . "_" . $_FILES['gambar']['name'];
@@ -64,9 +57,6 @@ class BarangController{
         header("Location: index.php?controller=barang&action=index");
     }
 
-    // ==========================
-    // HALAMAN EDIT
-    // ==========================
     public function edit()
     {
         $id = $_GET['id'];
@@ -80,9 +70,6 @@ class BarangController{
         include __DIR__ . '/../views/barang_edit.php';
     }
 
-    // ==========================
-    // UPDATE BARANG
-    // ==========================
     public function update()
     {
         $id = $_POST['id_barang'];
@@ -119,9 +106,6 @@ class BarangController{
         header("Location: index.php?controller=barang&action=index");
     }
 
-    // ==========================
-    // HAPUS
-    // ==========================
     public function delete()
     {
         $id = $_GET['id'];
