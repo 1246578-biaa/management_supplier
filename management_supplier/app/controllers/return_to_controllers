@@ -1,0 +1,47 @@
+<?php
+require_once __DIR__ . '/../config/database.php';
+require_once __DIR__ . '/../models/return_to.php';
+
+class Return_toController {
+    private $model;
+    private $db;
+
+    public function __construct() {
+        $database = new Database();
+        $this->db = $database->getConnection();
+        $this->model = new Return_to($this->db);
+    }
+
+    public function index($notif = '') {
+        $returns = $this->model->getReturnDatangLangsung();
+        $suppliers = $this->model->getSupplierDatangLangsung();
+        $newId = $this->model->generateIdReturn();
+        require __DIR__ . '/../views/return_to_views.php';
+    }
+
+    public function simpan() {
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $data = [
+                'id_return' => $_POST['id_return'],
+                'id_supplier' => $_POST['id_supplier'],
+                'id_barang' => $_POST['id_barang'],
+                'jumlah' => $_POST['jumlah'],
+                'alasan' => $_POST['alasan'],
+                'tanggal_return' => $_POST['tanggal_return']
+            ];
+            try {
+                $this->model->simpan($data);
+                $this->index("✅ Data return berhasil ditambahkan!");
+            } catch (PDOException $e) {
+                $this->index("❌ Terjadi kesalahan: " . $e->getMessage());
+            }
+        }
+    }
+
+    public function getBarang() {
+        $id_supplier = $_GET['id_supplier'] ?? '';
+        $barangs = $this->model->getBarangBySupplier($id_supplier);
+        echo json_encode($barangs);
+    }
+}
+?>
