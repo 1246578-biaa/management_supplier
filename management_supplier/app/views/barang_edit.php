@@ -1,68 +1,53 @@
 <?php include __DIR__ . "/template/header.php"; ?>
 
-<div class="container">
-
+<div class="container mt-4">
     <h3>Edit Barang</h3>
 
-    <form action="index.php?controller=barang&action=update" method="POST" enctype="multipart/form-data" class="form-horizontal">
+    <form action="?controller=barang&action=update" method="POST" enctype="multipart/form-data">
 
-        <input type="hidden" name="gambar_lama" value="<?= $barang['Gambar'] ?>">
+        <input type="hidden" name="id_barang" value="<?= $barang['id_barang'] ?>">
+        <input type="hidden" name="gambar_lama" value="<?= $barang['gambar'] ?>">
 
-        <div class="form-group">
-            <label class="col-sm-2 control-label">ID Barang</label>
-            <div class="col-sm-4">
-                <input type="text" name="id_barang" value="<?= $barang['id_barang'] ?>" readonly class="form-control">
-            </div>
-        </div>
-
-        <div class="form-group">
-            <label class="col-sm-2 control-label">Supplier</label>
-            <div class="col-sm-4">
-                <select name="id_supplier" class="form-control">
-                    <?php foreach ($suppliers as $s): ?>
-                    <option value="<?= $s['id_supplier'] ?>" <?= ($s['id_supplier'] == $barang['id_supplier']) ? "selected" : "" ?>>
+        <div class="form-group mb-2">
+            <label>Supplier</label>
+            <select name="id_supplier" class="form-control" required>
+                <?php foreach($suppliers as $s): ?>
+                    <option value="<?= $s['id_supplier'] ?>" 
+                            <?= ($s['id_supplier'] == $barang['id_supplier'] ? 'selected' : '') ?>>
                         <?= $s['nama_supplier'] ?>
                     </option>
-                    <?php endforeach; ?>
-                </select>
-            </div>
+                <?php endforeach ?>
+            </select>
         </div>
 
-        <div class="form-group">
-            <label class="col-sm-2 control-label">Nama Barang</label>
-            <div class="col-sm-4">
-                <input type="text" name="nama_barang" value="<?= $barang['nama_barang'] ?>" class="form-control">
-            </div>
+        <div class="form-group mb-2">
+            <label>Nama Barang</label>
+            <input type="text" name="nama_barang" value="<?= $barang['nama_barang'] ?>" class="form-control" required>
         </div>
 
-        <div class="form-group">
-            <label class="col-sm-2 control-label">Stok</label>
-            <div class="col-sm-4">
-                <input type="number" name="stok" value="<?= $barang['stok'] ?>" class="form-control">
-            </div>
+        <div class="form-group mb-2">
+            <label>Stok</label>
+            <input type="number" name="stok" value="<?= $barang['stok'] ?>" class="form-control" required>
         </div>
 
-        <div class="form-group">
-            <label class="col-sm-2 control-label">Harga</label>
-            <div class="col-sm-4">
-                <input type="number" name="harga" value="<?= $barang['harga'] ?>" class="form-control">
-            </div>
+        <div class="form-group mb-2">
+            <label>Harga</label>
+            <input type="number" name="harga" value="<?= $barang['harga'] ?>" class="form-control" required>
         </div>
 
-        <div class="form-group">
-            <label class="col-sm-2 control-label">Gambar</label>
-            <div class="col-sm-4">
-                <input type="file" name="Gambar" class="form-control">
-                <br>
-                <?php if ($barang['Gambar']): ?>
-                    <img src="assets/images/<?= $barang['Gambar'] ?>" width="80">
-                <?php endif; ?>
-            </div>
+        <div class="form-group mb-2">
+            <label>Gambar Sekarang</label><br>
+            <img src="landing/assets/images/<?= $barang['gambar'] ?>" width="200" class="mb-2" style="object-fit:cover;">
         </div>
 
-        <button class="btn btn-primary">Update</button>
+        <div class="form-group mb-2">
+            <label>Gambar Baru (optional)</label>
+            <input type="file" name="gambar" class="form-control">
+        </div>
+
+        <button class="btn btn-success mt-2">Update</button>
+        <a href="?controller=barang" class="btn btn-secondary mt-2">Batal</a>
     </form>
-
 </div>
 
 <?php include __DIR__ . "/template/footer.php"; ?>
