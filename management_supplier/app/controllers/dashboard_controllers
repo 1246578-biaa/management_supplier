@@ -5,7 +5,7 @@ class DashboardController
 
     public function __construct($db)
     {
-        require_once __DIR__ . '/../models/dashboard_model.php';
+        require_once __DIR__.'/../models/dashboard_model.php';
         $this->model = new dashboard_model($db);
     }
 
@@ -20,11 +20,12 @@ class DashboardController
         $pesananTerbaru = $this->model->getPesananTerbaru();
 
         $chartSupplier = $this->model->getChartPesananPerSupplier();
-        $chartTime     = $this->model->getChartPesananPerBulan();
+        $chartTime     = $this->model->getChartPesananPerTime('bulan'); // default: bulan
 
-        require_once __DIR__ . '/../views/dashboard_views.php';
+        require_once __DIR__.'/../views/dashboard_views.php';
     }
-    
+
+    // Ajax filter chart per waktu
     public function filterChart($periode)
     {
         $data = $this->model->getChartPesananPerTime($periode);
