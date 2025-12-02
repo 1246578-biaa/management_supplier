@@ -1,40 +1,45 @@
 <?php
-
-class BarangController
-{
+class BarangController{
+    
     private $db;
-    private $barangModel;
 
     public function __construct($db)
     {
         $this->db = $db;
-        require_once __DIR__ . '/../models/Barang.php';
-        $this->barangModel = new Barang($db);
     }
 
-    // =======================
-    // HALAMAN LIST
-    // =======================
+    // ==========================
+    // HALAMAN UTAMA
+    // ==========================
     public function index()
     {
-        $page  = isset($_GET['page']) ? (int)$_GET['page'] : 1;
-        $limit = 10;
-        $offset = ($page - 1) * $limit;
-
-        $barangList = $this->barangModel->paginate($limit, $offset);
-        $totalData  = $this->barangModel->countAll();
-        $totalPage  = ceil($totalData / $limit);
-
-        $idBaru = $this->barangModel->generateID();
+        // Ambil supplier
         $suppliers = $this->db->query("SELECT * FROM supplier")->fetchAll(PDO::FETCH_ASSOC);
+
+        // Auto ID Barang
+        $cek = $this->db->query("SELECT MAX(id_barang) AS maxID FROM barang")->fetch(PDO::FETCH_ASSOC);
+
+        $idBaru = "BRG001";
+        if ($cek && $cek['maxID']) {
+            $num = (int) substr($cek['maxID'], 3);
+            $idBaru = "BRG" . str_pad($num + 1, 3, "0", STR_PAD_LEFT);
+        }
+
+        // Ambil barang
+        $stmt = $this->db->query("
+            SELECT b.*, s.nama_supplier 
+            FROM barang b
+            LEFT JOIN supplier s ON b.id_supplier = s.id_supplier
+        ");
+        $barangList = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
         include __DIR__ . '/../views/barang_views.php';
     }
 
-    // =======================
-    // SIMPAN BARANG
-    // =======================
-    public function simpan()
+    // ==========================
+    // TAMBAH BARANG
+    // ==========================
+    public function store()
     {
         $id_barang   = $_POST['id_barang'];
         $id_supplier = $_POST['id_supplier'];
@@ -42,90 +47,96 @@ class BarangController
         $stok        = $_POST['stok'];
         $harga       = $_POST['harga'];
 
-        // Upload gambar baru
+        // upload gambar
         $gambar = "";
         if (!empty($_FILES['gambar']['name'])) {
             $gambar = time() . "_" . $_FILES['gambar']['name'];
-            move_uploaded_file($_FILES['gambar']['tmp_name'], "landing/assets/images/" . $gambar);
+            move_uploaded_file($_FILES['gambar']['tmp_name'], "assets/images/" . $gambar);
         }
 
-        $this->barangModel->create([
-            'id_barang'   => $id_barang,
-            'id_supplier' => $id_supplier,
-            'nama_barang' => $nama_barang,
-            'stok'        => $stok,
-            'harga'       => $harga,
-            'gambar'      => $gambar
-        ]);
+        $stmt = $this->db->prepare("
+            INSERT INTO barang(id_barang, id_supplier, nama_barang, stok, harga, gambar)
+            VALUES(?,?,?,?,?,?)
+        ");
+
+        $stmt->execute([$id_barang, $id_supplier, $nama_barang, $stok, $harga, $gambar]);
 
         header("Location: index.php?controller=barang&action=index");
-        exit;
     }
 
-    // =======================
+    // ==========================
     // HALAMAN EDIT
-    // =======================
+    // ==========================
     public function edit()
     {
         $id = $_GET['id'];
-        $barang = $this->barangModel->find($id);
+
+        $stmt = $this->db->prepare("SELECT * FROM barang WHERE id_barang = ?");
+        $stmt->execute([$id]);
+        $barang = $stmt->fetch(PDO::FETCH_ASSOC);
+
         $suppliers = $this->db->query("SELECT * FROM supplier")->fetchAll(PDO::FETCH_ASSOC);
 
         include __DIR__ . '/../views/barang_edit.php';
     }
 
-    // =======================
-    // PROSES UPDATE
-    // =======================
+    // ==========================
+    // UPDATE BARANG
+    // ==========================
     public function update()
     {
         $id = $_POST['id_barang'];
+        $supplier = $_POST['id_supplier'];
+        $nama = $_POST['nama_barang'];
+        $stok = $_POST['stok'];
+        $harga = $_POST['harga'];
+        $gambar_lama = $_POST['gambar_lama'];
 
-        // Data default (gambar lama)
-        $data = [
-            'id_barang'   => $id,
-            'id_supplier' => $_POST['id_supplier'],
-            'nama_barang' => $_POST['nama_barang'],
-            'stok'        => $_POST['stok'],
-            'harga'       => $_POST['harga'],
-            'gambar'      => $_POST['gambar_lama']
-        ];
+        $gambar = $gambar_lama;
 
-        // Jika ada upload gambar baru
         if (!empty($_FILES['gambar']['name'])) {
+            $gambar = time() . "_" . $_FILES['gambar']['name'];
 
-            $gambarBaru = time() . "_" . $_FILES['gambar']['name'];
-            move_uploaded_file($_FILES['gambar']['tmp_name'], "landing/assets/images/" . $gambarBaru);
-
-            // Hapus gambar lama
-            if (!empty($data['gambar']) && file_exists("landing/assets/images/" . $data['gambar'])) {
-                unlink("landing/assets/images/" . $data['gambar']);
+            if (file_exists("assets/images/" . $gambar_lama)) {
+                unlink("assets/images/" . $gambar_lama);
             }
 
-            $data['gambar'] = $gambarBaru;
+            move_uploaded_file($_FILES['gambar']['tmp_name'], "assets/images/" . $gambar);
         }
 
-        $this->barangModel->update($data);
+        $stmt = $this->db->prepare("
+            UPDATE barang SET 
+            id_supplier=?,
+            nama_barang=?,
+            stok=?,
+            harga=?,
+            gambar=?
+            WHERE id_barang=?
+        ");
+
+        $stmt->execute([$supplier, $nama, $stok, $harga, $gambar, $id]);
 
         header("Location: index.php?controller=barang&action=index");
-        exit;
     }
 
-    // =======================
+    // ==========================
     // HAPUS
-    // =======================
+    // ==========================
     public function delete()
     {
         $id = $_GET['id'];
 
-        $row = $this->barangModel->find($id);
-        if ($row && file_exists("landing/assets/images/" . $row['gambar'])) {
-            unlink("landing/assets/images/" . $row['gambar']);
+        $cek = $this->db->prepare("SELECT gambar FROM barang WHERE id_barang=?");
+        $cek->execute([$id]);
+        $row = $cek->fetch(PDO::FETCH_ASSOC);
+
+        if ($row && file_exists("assets/images/" . $row['gambar'])) {
+            unlink("assets/images/" . $row['gambar']);
         }
 
-        $this->barangModel->delete($id);
+        $stmt = $this->db->prepare("DELETE FROM barang WHERE id_barang=?");
+        $stmt->execute([$id]);
 
         header("Location: index.php?controller=barang&action=index");
-        exit;
     }
 }
