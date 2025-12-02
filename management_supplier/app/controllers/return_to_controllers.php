@@ -1,66 +1,79 @@
 <?php
-require_once __DIR__ . '/../models/login.php';
+require_once __DIR__ . '/../models/return_to.php';
 
-class LoginController {
+class return_toController {
+    private $db;
+    private $model;
+
+    public function __construct($db) {
+        $this->db = $db;
+        $this->model = new return_to($db);
+        if(session_status() === PHP_SESSION_NONE) session_start();
+    }
 
     public function index() {
-        include __DIR__ . '/../views/login_views.php';
+        $data = $this->model->getall();
+        $suppliers = $this->model->getsuppliers();
+        $barangs   = $this->model->getbarangs();
+        include __DIR__ . '/../views/return_to_views.php';
     }
 
-    public function process() {
+    public function simpan() {
+        if($_SERVER['REQUEST_METHOD'] !== 'POST') die("akses tidak valid");
 
-        if (session_status() === PHP_SESSION_NONE) {
-            session_start();
-        }
+        $data = [
+            'id_supplier'    => $_POST['id_supplier'] ?? '',
+            'id_barang'      => $_POST['id_barang'] ?? '',
+            'jumlah'         => $_POST['jumlah'] ?? 0,
+            'alasan'         => $_POST['alasan'] ?? '',
+            'tanggal_return' => $_POST['tanggal_return']
+        ];
 
-        $email = $_POST['email'] ?? '';
-        $password = $_POST['password'] ?? '';
-
-        $login = new Login();
-        $admin = $login->cekLogin($email, $password);
-
-        if ($admin) {
-
-            // SET SESSION
-            $_SESSION['admin'] = $admin;
-
-            // Redirect langsung tanpa alert
-            header("Location: index.php?controller=dashboard&action=index");
+        try {
+            $this->model->insert($data);
+            header("Location: index.php?controller=return_to&action=index");
             exit;
-
-        } else {
-
-            // CEK EMAIL ADA ATAU TIDAK
-            require_once __DIR__ . '/../config/database.php';
-            $db = new Database();
-            $conn = $db->getConnection();
-
-            $cekEmail = $conn->prepare("SELECT email FROM admin WHERE email = :email");
-            $cekEmail->bindParam(':email', $email);
-            $cekEmail->execute();
-
-            if ($cekEmail->rowCount() == 0) {
-                header("Location: index.php?controller=login&action=index&error=wrong_email");
-            } else {
-                header("Location: index.php?controller=login&action=index&error=wrong_password");
-            }
-            exit;
+        } catch(Exception $e) {
+            die("gagal menyimpan return: " . $e->getMessage());
         }
     }
 
-    public function logout() {
+    public function hapus() {
+        $id = $_GET['id'] ?? '';
+        if(!$id) die("id return tidak valid");
 
-    if (session_status() === PHP_SESSION_NONE) {
-        session_start();
+        $this->model->delete($id);
+        header("Location: index.php?controller=return_to&action=index");
+        exit;
     }
 
-    session_destroy();
+    public function edit() {
+        $id = $_GET['id'] ?? '';
+        if(!$id) die("id return tidak valid");
 
-    // Arahkan ke landing page
-    header("Location: landing/index.php");
-    exit;
-}
+        $data = $this->model->getbyid($id);
+        $suppliers = $this->model->getsuppliers();
+        $barangs   = $this->model->getbarangs();
+        include __DIR__ . '/../views/return_to_edit.php';
+    }
 
+    public function update() {
+        if($_SERVER['REQUEST_METHOD'] !== 'POST') die("akses tidak valid");
+
+        $id = $_POST['id_return'] ?? '';
+        if(!$id) die("id return tidak valid");
+
+        $data = [
+            'id_supplier'    => $_POST['id_supplier'] ?? '',
+            'id_barang'      => $_POST['id_barang'] ?? '',
+            'jumlah'         => $_POST['jumlah'] ?? 0,
+            'alasan'         => $_POST['alasan'] ?? '',
+            'tanggal_return' => $_POST['tanggal_return']
+        ];
+
+        $this->model->update($id, $data);
+        header("Location: index.php?controller=return_to&action=index");
+        exit;
+    }
 }
 ?>
-
