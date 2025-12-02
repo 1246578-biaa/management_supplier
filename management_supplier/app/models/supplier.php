@@ -15,15 +15,43 @@ class Supplier {
         $this->conn = $db;
     }
 
-    // Ambil semua data supplier
-    public function readAll() {
+    // ===============================
+    // GET ALL SUPPLIER
+    // ===============================
+    public function getAll() {
         $query = "SELECT * FROM " . $this->table_name . " ORDER BY id_supplier ASC";
         $stmt = $this->conn->prepare($query);
         $stmt->execute();
         return $stmt;
     }
 
-    // Ambil 1 data supplier berdasarkan ID
+    // ===============================
+    // GET SUPPLIER TIPE: DIAMBIL
+    // ===============================
+    public function getAllSupplierDiambil() {
+        $query = "SELECT * FROM " . $this->table_name . "
+                  WHERE tipe_supplier = 'Diambil'
+                  ORDER BY nama_supplier ASC";
+        $stmt = $this->conn->prepare($query);
+        $stmt->execute();
+        return $stmt;
+    }
+
+    // ===============================
+    // GET SUPPLIER TIPE: DIKIRIM
+    // ===============================
+    public function getAllSupplierDikirim() {
+        $query = "SELECT * FROM " . $this->table_name . "
+                  WHERE tipe_supplier = 'Mengirim'
+                  ORDER BY nama_supplier ASC";
+        $stmt = $this->conn->prepare($query);
+        $stmt->execute();
+        return $stmt;
+    }
+
+    // ===============================
+    // GET ONE SUPPLIER
+    // ===============================
     public function readOne() {
         $query = "SELECT * FROM " . $this->table_name . " WHERE id_supplier = ? LIMIT 1";
         $stmt = $this->conn->prepare($query);
@@ -32,11 +60,14 @@ class Supplier {
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
-    // Input data supplier
+    // ===============================
+    // CREATE SUPPLIER
+    // ===============================
     public function create() {
         $query = "INSERT INTO " . $this->table_name . "
                   (id_supplier, nama_supplier, nama_alias, no_telp, alamat, tipe_supplier, jadwal_pengiriman)
                   VALUES (:id_supplier, :nama_supplier, :nama_alias, :no_telp, :alamat, :tipe_supplier, :jadwal_pengiriman)";
+
         $stmt = $this->conn->prepare($query);
 
         $stmt->bindParam(":id_supplier", $this->id_supplier);
@@ -50,9 +81,11 @@ class Supplier {
         return $stmt->execute();
     }
 
-    // Update supplier
+    // ===============================
+    // UPDATE SUPPLIER
+    // ===============================
     public function update() {
-        $query = "UPDATE " . $this->table_name . "
+        $query = "UPDATE " . $this->table_name . " 
                   SET nama_supplier = :nama_supplier,
                       nama_alias = :nama_alias,
                       no_telp = :no_telp,
@@ -60,6 +93,7 @@ class Supplier {
                       tipe_supplier = :tipe_supplier,
                       jadwal_pengiriman = :jadwal_pengiriman
                   WHERE id_supplier = :id_supplier";
+
         $stmt = $this->conn->prepare($query);
 
         $stmt->bindParam(":nama_supplier", $this->nama_supplier);
@@ -73,7 +107,9 @@ class Supplier {
         return $stmt->execute();
     }
 
-    // Delete supplier
+    // ===============================
+    // DELETE SUPPLIER
+    // ===============================
     public function delete() {
         $query = "DELETE FROM " . $this->table_name . " WHERE id_supplier = ?";
         $stmt = $this->conn->prepare($query);
