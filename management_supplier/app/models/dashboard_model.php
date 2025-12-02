@@ -8,6 +8,7 @@ class dashboard_model
         $this->db = $db;
     }
 
+    // Statistik total
     public function getTotalPesanan() { return (int)$this->db->query("SELECT COUNT(*) FROM pesanan")->fetchColumn(); }
     public function getTotalDikirim() { return (int)$this->db->query("SELECT COUNT(*) FROM pesanan WHERE status='Dikirim'")->fetchColumn(); }
     public function getTotalDiambil() { return (int)$this->db->query("SELECT COUNT(*) FROM pesanan WHERE status='Diambil'")->fetchColumn(); }
@@ -15,18 +16,20 @@ class dashboard_model
     public function getTotalSupplier() { return (int)$this->db->query("SELECT COUNT(*) FROM supplier")->fetchColumn(); }
     public function getTotalReturn() { return (int)$this->db->query("SELECT COUNT(*) FROM return_to")->fetchColumn(); }
 
-    public function getPesananTerbaru()
+    // Pesanan terbaru
+    public function getPesananTerbaru($limit = 10)
     {
         $stmt = $this->db->query("
             SELECT p.id_pesanan, p.tgl_pesanan, p.status, s.nama_supplier
             FROM pesanan p
             LEFT JOIN supplier s ON p.id_supplier = s.id_supplier
             ORDER BY p.tgl_pesanan DESC
-            LIMIT 10
+            LIMIT $limit
         ");
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
+    // Chart: pesanan per supplier
     public function getChartPesananPerSupplier()
     {
         $stmt = $this->db->query("
@@ -39,29 +42,28 @@ class dashboard_model
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    public function getChartPesananPerBulan()
-    {
-        $stmt = $this->db->query("
-            SELECT DATE_FORMAT(tgl_pesanan,'%Y-%m') AS bulan, COUNT(*) AS total
-            FROM pesanan
-            GROUP BY DATE_FORMAT(tgl_pesanan,'%Y-%m')
-            ORDER BY bulan ASC
-        ");
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
-    }
-
-    // Fungsi Ajax: filter waktu
+    // Chart: pesanan per waktu
     public function getChartPesananPerTime($periode)
     {
         switch($periode){
-            case 'minggu':
+            case 'hari':
                 $stmt = $this->db->query("
-                    SELECT CONCAT(YEARWEEK(tgl_pesanan,1)) AS label, COUNT(*) AS total
+                    SELECT DATE(tgl_pesanan) AS label, COUNT(*) AS total
                     FROM pesanan
-                    GROUP BY YEARWEEK(tgl_pesanan,1)
+                    GROUP BY DATE(tgl_pesanan)
                     ORDER BY label ASC
                 ");
                 break;
+
+            case 'minggu':
+                $stmt = $this->db->query("
+                    SELECT CONCAT(YEAR(tgl_pesanan), '-W', WEEK(tgl_pesanan,1)) AS label, COUNT(*) AS total
+                    FROM pesanan
+                    GROUP BY YEAR(tgl_pesanan), WEEK(tgl_pesanan,1)
+                    ORDER BY label ASC
+                ");
+                break;
+
             case 'bulan':
                 $stmt = $this->db->query("
                     SELECT DATE_FORMAT(tgl_pesanan,'%Y-%m') AS label, COUNT(*) AS total
@@ -70,6 +72,7 @@ class dashboard_model
                     ORDER BY label ASC
                 ");
                 break;
+
             case 'tahun':
                 $stmt = $this->db->query("
                     SELECT YEAR(tgl_pesanan) AS label, COUNT(*) AS total
@@ -78,6 +81,7 @@ class dashboard_model
                     ORDER BY label ASC
                 ");
                 break;
+
             default:
                 return [];
         }
